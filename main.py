@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-app = FastAPI()
+import fastapi 
+app = fastapi.FastAPI()
 
 @app.get("/")
 def main():
