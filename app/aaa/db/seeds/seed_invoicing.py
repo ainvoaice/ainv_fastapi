@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import (
-    BusinessEntity,
+    ZBeDB,
     Client,
     Fee,
     Invoice,
@@ -16,7 +16,7 @@ from app.db.models import (
     InvoicePayment,
     Item,
     PaymentMethod,
-    Plan,
+    PlanDB,
     Tax,
     ZMeDB,
 )
@@ -46,13 +46,13 @@ async def _ensure_plans(session: AsyncSession, *, ten_id: UUID, owner_id: UUID) 
     code_to_id: dict[str, UUID] = {}
 
     for plan in plans:
-        existing = await session.scalar(select(Plan).where(Plan.plan_code == plan["plan_code"]))
+        existing = await session.scalar(select(PlanDB).where(PlanDB.plan_code == plan["plan_code"]))
         if existing:
             code_to_id[plan["plan_code"]] = existing.id
             continue
 
         row = _apply_base_fields(plan, ten_id=ten_id, biz_id=None, owner_id=owner_id, created_by=owner_id)
-        plan_obj = Plan(**row)
+        plan_obj = PlanDB(**row)
         session.add(plan_obj)
         await session.flush()
         code_to_id[plan["plan_code"]] = plan_obj.id
@@ -92,7 +92,7 @@ async def ensure_invoicing_seeds_for_user(
 
     # Business entity
     biz = await session.scalar(
-        select(BusinessEntity).where(BusinessEntity.user_id == owner_id)
+        select(ZBeDB).where(ZBeDB.user_id == owner_id)
     )
     if not biz:
         payloads = build_seed_payloads(now)
@@ -100,7 +100,7 @@ async def ensure_invoicing_seeds_for_user(
         biz_id = uuid4()
         plan_id = plan_ids.get("plan25_1")
         biz_row = _apply_base_fields(biz_row, ten_id=ten_id, biz_id=biz_id, owner_id=owner_id, created_by=owner_id)
-        biz = BusinessEntity(
+        biz = ZBeDB(
             id=biz_id,
             user_id=owner_id,
             be_plan_id=plan_id,

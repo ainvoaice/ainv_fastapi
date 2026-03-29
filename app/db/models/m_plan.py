@@ -2,10 +2,10 @@ from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base, BaseMixin
+from .m_base import Base, BaseMixin
 
 
-class Plan(Base, BaseMixin):
+class PlanDB(Base, BaseMixin):
     __tablename__ = "plans"
 
     plan_code: Mapped[str | None] = mapped_column(String(64))

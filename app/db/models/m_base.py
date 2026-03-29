@@ -15,16 +15,18 @@ from sqlalchemy.sql import func
 class Base(DeclarativeBase): pass
 
 class BaseMixin:
-    id: Mapped[UUID] = mapped_column(Uuid,primary_key=True,default=uuid4, index=True) # client only
+    # id: Mapped[UUID] = mapped_column(Uuid,primary_key=True,default=uuid4, index=True) # client only
     locale: Mapped[str | None] = mapped_column(String(32))
     
-    # id: Mapped[UUID] = mapped_column(
-    #     Uuid,        primary_key=True,index=True,        nullable=False,
-    #     server_default=text("gen_random_uuid()"),        
-    # ) 
+    id: Mapped[UUID] = mapped_column(
+        Uuid,        primary_key=True,index=True,        nullable=False,default=uuid4, 
+        server_default=text("gen_random_uuid()"),        
+    ) 
     # won't work with alembic, need manual set for zme table. other tables use client side.
     ten_id: Mapped[UUID] = mapped_column(Uuid, index=True, nullable=True)
     biz_id: Mapped[UUID] = mapped_column(Uuid, index=True, nullable=True)
+    zme_id: Mapped[UUID] = mapped_column(Uuid, index=True, nullable=True)
+    
     owner_id: Mapped[UUID] = mapped_column(Uuid, index=True, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     created_by: Mapped[UUID] = mapped_column(Uuid, index=True, nullable=True)

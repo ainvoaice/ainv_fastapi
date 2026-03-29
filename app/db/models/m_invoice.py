@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base, BaseMixin
+from .m_base import Base, BaseMixin
 
 
 class Invoice(Base, BaseMixin):
@@ -15,7 +15,7 @@ class Invoice(Base, BaseMixin):
 
     inv_code: Mapped[str | None] = mapped_column(String(64), index=True)
     inv_number: Mapped[str | None] = mapped_column(String(64))
-    inv_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    inv_issue_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     inv_due_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     inv_title: Mapped[str | None] = mapped_column(String(256))

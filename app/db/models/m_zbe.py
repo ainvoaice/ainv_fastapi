@@ -4,13 +4,11 @@ from uuid import UUID
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base, BaseMixin
+from .m_base import Base, BaseMixin
 
 
-class BusinessEntity(Base, BaseMixin):
-    __tablename__ = "business_entities"
-
-    user_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("zme.id"), index=True)
+class ZBeDB(Base, BaseMixin):
+    __tablename__ = "zbe"
 
     be_logo: Mapped[str | None] = mapped_column(String(512))
     be_name: Mapped[str | None] = mapped_column(String(256))
@@ -42,20 +40,14 @@ class BusinessEntity(Base, BaseMixin):
 
     be_plan_id: Mapped[UUID | None] = mapped_column(Uuid, ForeignKey("plans.id"), nullable=True)
     be_plan_name: Mapped[str | None] = mapped_column(String(128))
-    be_plan251_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan252_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan253_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan254_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan255_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan256_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan257_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan258_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    be_plan259_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    be_plan1_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    be_plan10_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    be_plan100_expired: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    user = relationship("ZMeDB", back_populates="businesses")
-    clients = relationship("Client", back_populates="business", cascade="all, delete-orphan")
-    items = relationship("Item", back_populates="business", cascade="all, delete-orphan")
-    invoices = relationship("Invoice", back_populates="business", cascade="all, delete-orphan")
-    payment_methods = relationship("PaymentMethod", back_populates="business", cascade="all, delete-orphan")
-    taxes = relationship("Tax", back_populates="business", cascade="all, delete-orphan")
-    fees = relationship("Fee", back_populates="business", cascade="all, delete-orphan")
+    # user = relationship("ZMeDB", back_populates="businesses")
+    # clients = relationship("Client", back_populates="business", cascade="all, delete-orphan")
+    # items = relationship("Item", back_populates="business", cascade="all, delete-orphan")
+    # invoices = relationship("Invoice", back_populates="business", cascade="all, delete-orphan")
+    # payment_methods = relationship("PaymentMethod", back_populates="business", cascade="all, delete-orphan")
+    # taxes = relationship("Tax", back_populates="business", cascade="all, delete-orphan")
+    # fees = relationship("Fee", back_populates="business", cascade="all, delete-orphan")
