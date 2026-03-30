@@ -7,11 +7,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .m_base import Base, BaseMixin
 
 
-class Invoice(Base, BaseMixin):
+class InvoiceDB(Base, BaseMixin):
     __tablename__ = "invoices"
-
-    user_id: Mapped[UUID | None] = mapped_column(Uuid, ForeignKey("zme.id"), index=True)
-    be_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("business_entities.id"), index=True)
 
     inv_code: Mapped[str | None] = mapped_column(String(64), index=True)
     inv_number: Mapped[str | None] = mapped_column(String(64))
@@ -71,6 +68,41 @@ class Invoice(Base, BaseMixin):
     inv_pdf_template: Mapped[str | None] = mapped_column(String(64))
     inv_terms_conditions: Mapped[str | None] = mapped_column(String(1024))
 
-    business = relationship("BusinessEntity", back_populates="invoices")
-    items = relationship("InvoiceItem", back_populates="invoice", cascade="all, delete-orphan")
-    payments = relationship("InvoicePayment", back_populates="invoice", cascade="all, delete-orphan")
+
+
+class InvoicePaymentDB(Base, BaseMixin):
+    __tablename__ = "invoice_payments"
+
+    inv_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("invoices.id"), index=True)
+
+    pm_id: Mapped[UUID | None] = mapped_column(Uuid, ForeignKey("payment_methods.id"), nullable=True)
+    pm_code: Mapped[str | None] = mapped_column(String(64), index=True)
+    pm_name: Mapped[str | None] = mapped_column(String(128))
+    pm_note: Mapped[str | None] = mapped_column(String(1024))
+
+    pay_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    pay_amount: Mapped[float | None] = mapped_column(Numeric(12, 2))
+    pay_reference: Mapped[str | None] = mapped_column(String(256))
+    pay_note: Mapped[str | None] = mapped_column(String(1024))
+
+
+
+class InvoiceItemDB(Base, BaseMixin):
+    __tablename__ = "invoice_items"
+
+    inv_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("invoices.id"), index=True)
+
+    item_id: Mapped[UUID | None] = mapped_column(Uuid, ForeignKey("items.id"), nullable=True)
+    item_code: Mapped[str | None] = mapped_column(String(64), index=True)
+    item_number: Mapped[str | None] = mapped_column(String(64))
+    item_name: Mapped[str | None] = mapped_column(String(256))
+    item_rate: Mapped[float | None] = mapped_column(Numeric(12, 2))
+    item_unit_of_measure: Mapped[str | None] = mapped_column(String(64))
+    item_unit: Mapped[str | None] = mapped_column(String(64))
+    item_sku: Mapped[str | None] = mapped_column(String(128))
+    item_description: Mapped[str | None] = mapped_column(String(1024))
+
+    item_quantity: Mapped[int | None] = mapped_column(Integer)
+    item_note: Mapped[str | None] = mapped_column(String(1024))
+    item_amount: Mapped[float | None] = mapped_column(Numeric(12, 2))
+
