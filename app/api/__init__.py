@@ -1,8 +1,72 @@
 from fastapi import APIRouter, Depends
-from app.api.sanity import sanRou
+from app.api.r_invoice import invoiceRou
+
+from app.api.r1_new_user_only import newUserRou
+from app.api.r2_zme import zmeRou
+from app.api.r3_be import beRou
+
+from app.api.r7_payroll_entry import entryRou
+from app.api.r6_payroll_history import historyRou
+from app.api.r5_payroll_schedule import scheduleRow
+from app.api.r4_employee import employeeRou
+from app.api.r_stripe import stripeRou
+
+from app.api.ai_rou_embedding import embRou
+from app.api.ai_rou_agent import agentRou
+from app.api.ai_rou_router import routerRou
+
 
 rou = APIRouter()
+rou.include_router(embRou, prefix="/embedding", tags=['0.embedding'])
+rou.include_router(agentRou, prefix="/agent", tags=['0.agent'])
+rou.include_router(routerRou, prefix="/embedding", tags=['0.embedding'])
+rou.include_router(newUserRou, prefix="/newuseronly", tags=["1.Register. Create New User Only"])     #给自己用的，创建用户和企业账号的
+rou.include_router(zmeRou, prefix="/zme", tags=["2.ZMe"])    
+rou.include_router(beRou, prefix="/be", tags=["3. clients. Business Entity"])
+rou.include_router(employeeRou, prefix="/employee", tags=["4.Employee"])
+rou.include_router(scheduleRow, prefix="/schedule", tags=["5.Payroll Schedule"])
+rou.include_router(historyRou, prefix="/history", tags=["6.Payroll History"])
+rou.include_router(entryRou, prefix="/entry", tags=["7.Payroll Entry"])
+rou.include_router(stripeRou, prefix="/stripe", tags=["Stripe Billing"])
 
-rou.include_router(sanRou, tags=["Sanity Test"])    
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rou.include_router(invoiceRou, prefix="/invoice", tags=["Invoice"])     #给别人用的

@@ -1,14 +1,14 @@
 # app/config.py
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 from functools import lru_cache
 
 
 class _Settings(BaseSettings):
-    T4_ASYNC: str = "postgresql+asyncpg://username:pwd@local/icedb"
-    T4_ADMIN: str = "postgresql+asyncpg://username:pwd@local/icedb"
+    AIN_SUPA_ASYNC: str = "postgresql+asyncpg://username:pwd@local/icedb"
     OPENAI_API_KEY: str =""
     COHERE_API_KEY: str = ""
+    TAVILY_API_KEY: str = ""
 
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
@@ -24,6 +24,8 @@ class _Settings(BaseSettings):
     STRIPE_PRICE_PRO_YEAR: str = "price_1TBOaiRwLzeE6kyCgHUak49W"
     STRIPE_PRICE_ENTERPRISE_MONTH: str = "price_1TBOb9RwLzeE6kyCcAgDncr1"
     STRIPE_PRICE_ENTERPRISE_YEAR: str = "price_1TBObXRwLzeE6kyCSWexfBjm"
+    
+    model_config = SettingsConfigDict(env_file=".env")
     
 @lru_cache()
 def get_settings_singleton()-> _Settings:
